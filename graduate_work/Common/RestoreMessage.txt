@@ -1,0 +1,10 @@
+Dear customer!
+
+Thank you for registering to School CRM. To confirm registration, you must follow the link below:
+
+[URL]
+
+If you forgot your password, simply hit “Forgot password” and you’ll be prompted to reset it.
+If you have any questions feel free to send email to 'support.schoolcrm@gmail.com'.
+
+We look forward to seeing you on our platform!

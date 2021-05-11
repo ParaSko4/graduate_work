@@ -119,7 +119,7 @@ namespace graduate_work.Utils
             var expClaim = jwtSecurityToken.Claims.First(claim => claim.Type == "exp").Value;
             var tokenExpiryTime = Convert.ToDouble(expClaim).UnixTimeStampToDateTime();
 
-            return tokenExpiryTime > DateTime.UtcNow.AddHours(3);
+            return tokenExpiryTime > DateTime.UtcNow.ToLocalTime();
         }
     }
 }

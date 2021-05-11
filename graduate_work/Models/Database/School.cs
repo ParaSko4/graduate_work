@@ -30,8 +30,9 @@ namespace graduate_work.Models.Database
         public int UserAccountId { get; set; }
         public UserAccount UserAccount { get; set; }
 
+        public ICollection<Auditorium> Auditoriums { get; set; }
         public ICollection<Lesson> Lessons { get; set; }
         public ICollection<LessonDuration> LessonsDurations { get; set; }
-        public ICollection<Auditorium> Auditoriums { get; set; }
+        public ICollection<PersonalData> PersonalDatas { get; set; }
     }
 }

@@ -12,6 +12,6 @@ namespace graduate_work.Models.Database
         public int SchoolId { get; set; }
         public School School { get; set; }
 
-        public ICollection<Schedule> Schedule { get; set; }
+        public ICollection<Schedule> Schedules { get; set; }
     }
 }

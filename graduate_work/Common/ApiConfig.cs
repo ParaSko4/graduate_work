@@ -26,7 +26,7 @@ namespace graduate_work.Common
 
         public const string ISSUER = "SCHOOL_CRM_PRIVATE_API";
         public const string AUDIENCE = "SCHOOL_CRM_USER";
-        public const int LIFETIME = 30; // время жизни токена - 5 минута
+        public const int LIFETIME = 10; // время жизни токена - 10 минут
 
         public const string ClaimTypeUserId = "UserId";
         public const string ClaimTypeLogin = "Login";

@@ -15,18 +15,14 @@ namespace graduate_work.Models.Database
         public string ResidenceAddress { get; set; }
         public string PhoneNumber { get; set; }
         public string Sex { get; set; }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreationDate { get; set; }
 
-        public int PersonalImgId { get; set; }
-        public PersonalImg PersonalImg { get; set; }
+        public int SchoolId { get; set; }
+        public School School { get; set; }
 
         public int UserAccountId { get; set; }
         public UserAccount UserAccount { get; set; }
-
-        public int SchoolId { get; set; }
-        public School School { get; set; }
 
         public ICollection<PersonalImg> PersonalImgs { get; set; }
     }

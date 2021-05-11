@@ -14,6 +14,6 @@ namespace graduate_work.Models.Database
         public School School { get; set; }
 
         public ICollection<AuditoriumImg> AuditoriumImg { get; set; }
-        public ICollection<Schedule> Schedule { get; set; }
+        public ICollection<Schedule> Schedules { get; set; }
     }
 }

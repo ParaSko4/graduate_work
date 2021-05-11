@@ -15,7 +15,7 @@ namespace graduate_work.Models.Database
         public int ClassId { get; set; }
         public Class Class { get; set; }
 
-        public ICollection<Progress> Progress { get; set; }
+        public ICollection<Progress> Progresses { get; set; }
         public ICollection<Family> Family { get; set; }
     }
 }

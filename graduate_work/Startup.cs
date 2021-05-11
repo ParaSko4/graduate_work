@@ -77,7 +77,6 @@ namespace graduate_work
             services.AddTransient<IJwtService, JwtService>();
             services.AddTransient<IEmailService, EmailService>();
 
-            services.AddCronJob();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

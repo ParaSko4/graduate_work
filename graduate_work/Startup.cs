@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace graduate_work
@@ -32,11 +33,11 @@ namespace graduate_work
         {
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "Cookies";
+                options.DefaultScheme = ApiConfig.COOKIE;
             })
-            .AddCookie("Cookies", options =>
+            .AddCookie(ApiConfig.COOKIE, options =>
             {
-                options.Cookie.Name = "auth_cookie";
+                options.Cookie.Name = ApiConfig.COOKIE_NAME;
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.Events = new CookieAuthenticationEvents
                 {
@@ -61,6 +62,7 @@ namespace graduate_work
             services.AddTransient<IClassRepository, ClassRepository>();
             services.AddTransient<IFamilyMemberRepository, FamilyMemberRepository>();
             services.AddTransient<IFamilyRepository, FamilyRepository>();
+            services.AddTransient<IHomeworkRepository, HomeworkRepository>();
             services.AddTransient<ILessonDurationRepository, LessonDurationRepository>();
             services.AddTransient<ILessonRepository, LessonRepository>();
             services.AddTransient<IPersonalDataRepository, PersonalDataRepository>();
@@ -76,7 +78,7 @@ namespace graduate_work
 
             services.AddTransient<IJwtService, JwtService>();
             services.AddTransient<IEmailService, EmailService>();
-
+            services.AddTransient<IImgService, ImgService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

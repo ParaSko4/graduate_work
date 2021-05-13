@@ -16,5 +16,7 @@ namespace graduate_work.Models.Database
 
         public ICollection<Progress> Progresses { get; set; }
         public ICollection<Schedule> Schedules { get; set; }
+        public ICollection<Homework> Homeworks { get; set; }
+
     }
 }

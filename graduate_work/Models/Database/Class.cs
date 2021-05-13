@@ -19,6 +19,7 @@ namespace graduate_work.Models.Database
         public ICollection<ClassImg> ClassImgs { get; set; }
         public ICollection<Schedule> Schedules { get; set; }
         public ICollection<Student> Students { get; set; }
+        public ICollection<Homework> Homeworks { get; set; }
 
     }
 }

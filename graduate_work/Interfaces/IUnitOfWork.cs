@@ -8,6 +8,7 @@ namespace graduate_work.Interfaces
         IAuditoriumImgRepository AuditoriumImgRepository { get; }
         IClassRepository ClassRepository { get; }
         IClassImgRepository ClassImgRepository { get; }
+        IHomeworkRepository HomeworkRepository { get; }
         IFamilyRepository FamilyRepository { get; }
         IFamilyMemberRepository FamilyMemberRepository { get; }
         ILessonRepository LessonRepository { get; }

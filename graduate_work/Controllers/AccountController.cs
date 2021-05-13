@@ -5,6 +5,7 @@ using graduate_work.Models.Api;
 using graduate_work.Models.Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace graduate_work.Controllers
@@ -16,16 +17,26 @@ namespace graduate_work.Controllers
         private readonly IUnitOfWork dbUnit;
         private readonly IJwtService jwtService;
         private readonly IEmailService emailService;
+        private readonly IImgService imgService;
 
         private ActionResult ar;
 
-        public AccountController(IUnitOfWork dbUnit, IJwtService jwtService, IEmailService emailService)
+        public AccountController(IUnitOfWork dbUnit, IJwtService jwtService, IEmailService emailService, IImgService imgService)
         {
             this.dbUnit = dbUnit;
             this.jwtService = jwtService;
             this.emailService = emailService;
+            this.imgService = imgService;
         }
 
+        [Authorize]
+        [HttpGet("AuthorizeCheck")]
+        public ActionResult AuthorizeCheck()
+        {
+            return Ok();
+        }
+
+        [AllowAnonymous]
         [HttpPost("SignIn")]
         public ActionResult SignInApp([FromBody] SignInUser signInUser)
         {
@@ -37,13 +48,13 @@ namespace graduate_work.Controllers
             }
 
             int schoolId = user.Role == ApiConfig.ROLE_ADMIN ? dbUnit.SchoolRepository.FindByUserId(user.Id).Id : dbUnit.PersonalDataRepository.FindByUserId(user.Id).SchoolId;
-            Request.HttpContext.SignInAsync("Cookies", jwtService.GetClaimsForCookies(user.Id, schoolId, user.Role, user.Email));
+            Request.HttpContext.SignInAsync(ApiConfig.COOKIE, jwtService.GetClaimsForCookies(user.Id, schoolId, user.Role, user.Email));
 
             return Ok(HttpResponseMessages.SignInSuccess);
         }
 
         [Authorize]
-        [HttpPost("SignOut")]
+        [HttpDelete("SignOut")]
         public ActionResult SignOutApp()
         {
             HttpContext.SignOutAsync();
@@ -53,30 +64,30 @@ namespace graduate_work.Controllers
 
         [AllowAnonymous]
         [HttpPost("SchoolRegistration")]
-        public ActionResult SchoolRegistration([FromBody] SchoolRegistrationInfo registrationInfo)
+        public ActionResult SchoolRegistration(SchoolRegistrationInfo schoolRegistrationInfo)
         {
-            if (registrationInfo.Password.Length < 8 || registrationInfo.Password.Length > 32)
+            if (schoolRegistrationInfo.Password.Length < 8 || schoolRegistrationInfo.Password.Length > 32)
             {
-                return BadRequest(HttpResponseMessages.RegistrationUserBadPassword);
+                return BadRequest(HttpResponseMessages.BadPassword);
             }
-            if (dbUnit.UserAccountRepository.isExistByLogin(registrationInfo.Login))
+            if (dbUnit.UserAccountRepository.isExistByLogin(schoolRegistrationInfo.Login))
             {
                 return BadRequest(HttpResponseMessages.RegistrationUserExistByLogin);
             }
-            if (dbUnit.UserAccountRepository.isExistByEmail(registrationInfo.Email))
+            if (dbUnit.UserAccountRepository.isExistByEmail(schoolRegistrationInfo.Email))
             {
                 return BadRequest(HttpResponseMessages.RegistrationUserExistByEmail);
             }
-            if (!emailService.IsEmailValid(registrationInfo.Email))
+            if (!emailService.IsEmailValid(schoolRegistrationInfo.Email))
             {
                 return BadRequest(HttpResponseMessages.RegistrationUserBadEmail);
             }
-            if (dbUnit.SchoolRepository.isExistByName(registrationInfo.SchoolName))
+            if (dbUnit.SchoolRepository.isExistByName(schoolRegistrationInfo.SchoolName))
             {
                 return BadRequest(HttpResponseMessages.RegistrationSchoolExistByName);
             }
 
-            emailService.SendMessage(ApiConfig.Options.SchoolRegistration, registrationInfo.Email, registrationInfo);
+            emailService.SendMessage(ApiConfig.Options.SchoolRegistration, schoolRegistrationInfo.Email, schoolRegistrationInfo);
 
             return Ok(HttpResponseMessages.RegistrationSuccess);
         }
@@ -110,11 +121,11 @@ namespace graduate_work.Controllers
         {
             if (!dbUnit.UserAccountRepository.isExistByEmail(email))
             {
-                return BadRequest("Account with such an email is not exist.");
+                return BadRequest(HttpResponseMessages.EmailNotExist);
             }
             emailService.SendMessage(ApiConfig.Options.Restore, email);
 
-            return Ok("Please check your email for password recovery.");
+            return Ok(HttpResponseMessages.RestoreCheckEmail);
         }
 
         [AllowAnonymous]
@@ -130,6 +141,10 @@ namespace graduate_work.Controllers
             if (restoreData.NewPassword != restoreData.RepeatedNewPassword)
             {
                 return BadRequest(HttpResponseMessages.PasswordNotMatch);
+            }
+            if (restoreData.NewPassword.Length < 8 || restoreData.NewPassword.Length > 32)
+            {
+                return BadRequest(HttpResponseMessages.BadPassword);
             }
 
             UserAccount userAccount = dbUnit.UserAccountRepository.FindByEmail(jwtService.GetDataFromJwt(ApiConfig.Options.Restore, restoreData.Jwt) as string);

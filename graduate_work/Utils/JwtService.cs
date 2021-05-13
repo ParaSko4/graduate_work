@@ -2,7 +2,6 @@
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -107,7 +106,7 @@ namespace graduate_work.Utils
                 new Claim(ApiConfig.ClaimTypeSchoolId, schoolId.ToString()),
                 new Claim(ClaimTypes.Role, role),
                 new Claim(ApiConfig.ClaimTypeUserEmail, email),
-            }, "Cookies");
+            }, ApiConfig.COOKIE);
 
             return new ClaimsPrincipal(new ClaimsPrincipal(claimsIdentity));
         }
@@ -116,7 +115,7 @@ namespace graduate_work.Utils
         {
             jwtSecurityToken = jwtSecurityTokenHandler.ReadToken(jwt) as JwtSecurityToken;
 
-            var expClaim = jwtSecurityToken.Claims.First(claim => claim.Type == "exp").Value;
+            var expClaim = jwtSecurityToken.Claims.First(claim => claim.Type == ApiConfig.ClaimTypeExpiryToken).Value;
             var tokenExpiryTime = Convert.ToDouble(expClaim).UnixTimeStampToDateTime();
 
             return tokenExpiryTime > DateTime.UtcNow.ToLocalTime();

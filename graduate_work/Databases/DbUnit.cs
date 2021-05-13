@@ -13,7 +13,7 @@ namespace graduate_work.Databases
             IFamilyMemberRepository familyMemberRepository, ILessonRepository lessonRepository, ILessonDurationRepository lessonDurationRepository,
             IPersonalDataRepository personalDataRepository, IPersonalImgRepository personalImgRepository, IProgressRepository progressRepository,
             IScheduleRepository scheduleRepository, ISchoolRepository schoolRepository, IStudentRepository studentRepository,
-            ITeacherRepository teacherRepository, IUserAccountRepository userAccountRepository)
+            ITeacherRepository teacherRepository, IUserAccountRepository userAccountRepository, IHomeworkRepository homeworkRepository)
         {
             this.db = db;
 
@@ -21,6 +21,7 @@ namespace graduate_work.Databases
             AuditoriumImgRepository = auditoriumImgRepository;
             ClassRepository = classRepository;
             ClassImgRepository = classImgRepository;
+            HomeworkRepository = homeworkRepository;
             FamilyRepository = familyRepository;
             FamilyMemberRepository = familyMemberRepository;
             LessonDurationRepository = lessonDurationRepository;
@@ -42,6 +43,8 @@ namespace graduate_work.Databases
         public IClassRepository ClassRepository { get; }
 
         public IClassImgRepository ClassImgRepository { get; }
+
+        public IHomeworkRepository HomeworkRepository { get; }
 
         public IFamilyRepository FamilyRepository { get; }
 

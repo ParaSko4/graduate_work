@@ -23,10 +23,14 @@ namespace graduate_work.Common
 
         #region JWT
         private const string KEY = "mysupersecret_secretkey!123";
+        public const string COOKIE = "Cookies";
 
+        public const string COOKIE_NAME = "auth_cookie";
         public const string ISSUER = "SCHOOL_CRM_PRIVATE_API";
         public const string AUDIENCE = "SCHOOL_CRM_USER";
         public const int LIFETIME = 10; // время жизни токена - 10 минут
+
+        public const string ClaimTypeExpiryToken = "exp";
 
         public const string ClaimTypeUserId = "UserId";
         public const string ClaimTypeLogin = "Login";
@@ -59,7 +63,7 @@ namespace graduate_work.Common
         public const string registrationUrl = "https://localhost:44301/api/Account?jwt=";
         public const string restoreUrl = "https://localhost:44301/api/Account?jwt=";
 
-        private const string Path = @"C:\Users\Mages\source\repos\graduate_work\graduate_work\Common\";
+        private const string Path = @"C:\Users\Mages\source\repos\graduate_work\graduate_work\Common\Static\";
         private const string ConfirmingMessageTemplateFileName = "ConfirmingMessage.txt";
         private const string RestoreMessageTemplateFileName = "RestoreMessage.txt";
         private const string RestoreSuccessMessageTemplateFileName = "RestoreSuccessMessage.txt";

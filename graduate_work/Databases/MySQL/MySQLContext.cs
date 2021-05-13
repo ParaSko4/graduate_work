@@ -63,6 +63,7 @@ namespace graduate_work.Databases.MySQL
 
                 entity.HasMany(l => l.Schedules).WithOne(s => s.Lesson).OnDelete(DeleteBehavior.Cascade).IsRequired();
                 entity.HasMany(l => l.Progresses).WithOne(p => p.Lesson).OnDelete(DeleteBehavior.Cascade).IsRequired();
+                entity.HasMany(l => l.Homeworks).WithOne(h => h.Lesson).OnDelete(DeleteBehavior.Cascade).IsRequired();
             })
             .Entity<LessonDuration>(entity =>
             {
@@ -115,6 +116,8 @@ namespace graduate_work.Databases.MySQL
 
                 entity.HasMany(t => t.Progresses).WithOne(p => p.Teacher).OnDelete(DeleteBehavior.Cascade).IsRequired();
                 entity.HasMany(t => t.Schedules).WithOne(s => s.Teacher).OnDelete(DeleteBehavior.Cascade).IsRequired();
+                entity.HasMany(t => t.Homeworks).WithOne(h => h.Teacher).OnDelete(DeleteBehavior.Cascade).IsRequired();
+
             })
             .Entity<Class>(entity =>
             {
@@ -128,6 +131,7 @@ namespace graduate_work.Databases.MySQL
                 entity.HasMany(c => c.ClassImgs).WithOne(ci => ci.Class).OnDelete(DeleteBehavior.Cascade).IsRequired();
                 entity.HasMany(c => c.Schedules).WithOne(s => s.Class).OnDelete(DeleteBehavior.Cascade).IsRequired();
                 entity.HasMany(c => c.Students).WithOne(s => s.Class).OnDelete(DeleteBehavior.Cascade).IsRequired();
+                entity.HasMany(s => s.Homeworks).WithOne(h => h.Class).OnDelete(DeleteBehavior.Cascade).IsRequired();
             })
             .Entity<ClassImg>(entity =>
             {
@@ -137,12 +141,12 @@ namespace graduate_work.Databases.MySQL
             })
             .Entity<Student>(entity =>
             {
-                entity.HasKey(e => e.Id);
+                entity.HasKey(s => s.Id);
 
-                entity.HasOne(d => d.PersonalData).WithOne().OnDelete(DeleteBehavior.Cascade).IsRequired();
+                entity.HasOne(s => s.PersonalData).WithOne().OnDelete(DeleteBehavior.Cascade).IsRequired();
 
-                entity.HasMany(d => d.Progresses).WithOne(p => p.Student).OnDelete(DeleteBehavior.Cascade).IsRequired();
-                entity.HasMany(d => d.Family).WithOne(f => f.Student).OnDelete(DeleteBehavior.Cascade).IsRequired();
+                entity.HasMany(s => s.Progresses).WithOne(p => p.Student).OnDelete(DeleteBehavior.Cascade).IsRequired();
+                entity.HasMany(s => s.Family).WithOne(f => f.Student).OnDelete(DeleteBehavior.Cascade).IsRequired();
             })
             .Entity<FamilyMember>(entity =>
             {
@@ -163,6 +167,11 @@ namespace graduate_work.Databases.MySQL
             {
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Mark).IsRequired();
+            })
+            .Entity<Homework>(entity =>
+            {
+                entity.HasKey(h => h.Id);
+                entity.Property(h => h.Task).IsRequired();
             })
             .Entity<Schedule>(entity =>
             {

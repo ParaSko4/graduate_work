@@ -2,7 +2,6 @@
 using graduate_work.Interfaces.IRepository;
 using graduate_work.Models.Database;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace graduate_work.Databases.Repositories
@@ -11,18 +10,9 @@ namespace graduate_work.Databases.Repositories
     {
         private readonly MySQLContext db;
 
-
         public UserAccountRepository(MySQLContext db)
         {
             this.db = db;
-        }
-
-        public List<UserAccount> UserAccounts
-        {
-            get
-            {
-                return db.UserAccounts.ToList();
-            }
         }
 
         public void Add(UserAccount user)

@@ -1,8 +1,11 @@
-﻿namespace graduate_work.Models.Api
+﻿using Microsoft.AspNetCore.Http;
+
+namespace graduate_work.Models.Api
 {
     public class SchoolRegistrationInfo
     {
-        public SchoolRegistrationInfo(string Login, string Password, string Email, string SchoolName, string SchoolLocation, string SchoolEmail, string SchoolNumber)
+        public SchoolRegistrationInfo(string Login, string Password, string Email, string SchoolName, 
+            string SchoolLocation, string SchoolEmail, string SchoolNumber)
         {
             this.Login = Login;
             this.Password = Password;

@@ -1,12 +1,9 @@
 ﻿using graduate_work.Models.Database;
-using System.Collections.Generic;
 
 namespace graduate_work.Interfaces.IRepository
 {
     public interface IUserAccountRepository
     {
-        List<UserAccount> UserAccounts { get; }
-
         void Add(UserAccount user);
         void Add(string Login, string Password, string Email, string Role);
         void Update(UserAccount user);

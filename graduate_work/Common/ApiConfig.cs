@@ -10,7 +10,7 @@ namespace graduate_work.Common
         {
             SchoolRegistration, SchoolRegistrationSuccess, 
             SchoolMemberRegistration, SchoolMemberRegistrationSuccess, 
-            Restore, RestoreSuccess,
+            Restore, RestoreSuccess
         }
 
         public const int DEFAULT_ID = -1;
@@ -43,6 +43,8 @@ namespace graduate_work.Common
         public const string ClaimTypeSchoolEmail = "SchoolEmail";
         public const string ClaimTypeSchoolNumber = "SchoolNumber";
 
+        public const string ClaimTypeUserNewPassword = "UserNewPassword";
+
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
@@ -58,10 +60,7 @@ namespace graduate_work.Common
         public static string EmailRestoreMessageTemplate = "";
         public static string EmailRestoreSuccessMessageTemplate = "";
 
-        public const string TagUrl = "[URL]";
-
-        public const string registrationUrl = "https://localhost:44301/api/Account?jwt=";
-        public const string restoreUrl = "https://localhost:44301/api/Account?jwt=";
+        public const string TagToken = "[URL]";
 
         private const string Path = @"C:\Users\Mages\source\repos\graduate_work\graduate_work\Common\Static\";
         private const string ConfirmingMessageTemplateFileName = "ConfirmingMessage.txt";

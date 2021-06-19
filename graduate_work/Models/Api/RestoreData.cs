@@ -4,14 +4,14 @@
     {
         public RestoreData() { }
 
-        public RestoreData(string Jwt, string NewPassword, string RepeatedNewPassword)
+        public RestoreData(string Email, string NewPassword, string RepeatedNewPassword)
         {
-            this.Jwt = Jwt;
+            this.Email = Email;
             this.NewPassword = NewPassword;
             this.RepeatedNewPassword = RepeatedNewPassword;
         }
 
-        public string Jwt { get; set; }
+        public string Email { get; set; }
         public string NewPassword { get; set; }
         public string RepeatedNewPassword { get; set; }
     }

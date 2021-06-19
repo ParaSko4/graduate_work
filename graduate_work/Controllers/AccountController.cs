@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace graduate_work.Controllers
 {
@@ -62,11 +63,18 @@ namespace graduate_work.Controllers
             return Ok(HttpResponseMessages.SignOutSuccess);
         }
 
+        [Authorize]
+        [HttpGet("GetUserInfo")]
+        public ActionResult GetUserInfo()
+        {
+            return Ok(jwtService.GetCookieInfo(User));
+        }
+
         [AllowAnonymous]
         [HttpPost("SchoolRegistration")]
         public ActionResult SchoolRegistration(SchoolRegistrationInfo schoolRegistrationInfo)
         {
-            if (schoolRegistrationInfo.Password.Length < 8 || schoolRegistrationInfo.Password.Length > 32)
+            if (schoolRegistrationInfo.Password == null || schoolRegistrationInfo.Password.Length < 8 || schoolRegistrationInfo.Password.Length > 32)
             {
                 return BadRequest(HttpResponseMessages.BadPassword);
             }
@@ -93,7 +101,7 @@ namespace graduate_work.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("SchoolRegistrationConfirmation")]
+        [HttpPost("SchoolRegistrationConfirmation")]
         public ActionResult SchoolRegistrationConfirmation(string jwt)
         {
             ar = IsJwtValid(jwt);
@@ -117,26 +125,11 @@ namespace graduate_work.Controllers
 
         [AllowAnonymous]
         [HttpPost("Restore")]
-        public ActionResult Restore(string email)
+        public ActionResult Restore(RestoreData restoreData)
         {
-            if (!dbUnit.UserAccountRepository.isExistByEmail(email))
+            if (!dbUnit.UserAccountRepository.isExistByEmail(restoreData.Email))
             {
                 return BadRequest(HttpResponseMessages.EmailNotExist);
-            }
-            emailService.SendMessage(ApiConfig.Options.Restore, email);
-
-            return Ok(HttpResponseMessages.RestoreCheckEmail);
-        }
-
-        [AllowAnonymous]
-        [HttpPost("RestoreConfirming")]
-        public ActionResult RestoreConfirming([FromBody] RestoreData restoreData)
-        {
-            ar = IsJwtValid(restoreData.Jwt);
-
-            if (ar != null)
-            {
-                return ar;
             }
             if (restoreData.NewPassword != restoreData.RepeatedNewPassword)
             {
@@ -146,9 +139,26 @@ namespace graduate_work.Controllers
             {
                 return BadRequest(HttpResponseMessages.BadPassword);
             }
+            emailService.SendMessage(ApiConfig.Options.Restore, restoreData.Email, restoreData);
 
-            UserAccount userAccount = dbUnit.UserAccountRepository.FindByEmail(jwtService.GetDataFromJwt(ApiConfig.Options.Restore, restoreData.Jwt) as string);
-            userAccount.Password = restoreData.NewPassword;
+            return Ok(HttpResponseMessages.RestoreCheckEmail);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("RestoreConfirming")]
+        public ActionResult RestoreConfirming(string jwt)
+        {
+            ar = IsJwtValid(jwt);
+
+            if (ar != null)
+            {
+                return ar;
+            }
+
+            RestoreData rd = jwtService.GetDataFromJwt(ApiConfig.Options.Restore, jwt) as RestoreData;
+
+            UserAccount userAccount = dbUnit.UserAccountRepository.FindByEmail(rd.Email);
+            userAccount.Password = rd.NewPassword;
 
             dbUnit.UserAccountRepository.Update(userAccount);
             dbUnit.Complete();
@@ -161,7 +171,7 @@ namespace graduate_work.Controllers
 
         private ActionResult IsJwtValid(string jwt)
         {
-            if (jwt == null || jwt.Length == 0)
+            if (!jwtService.CheckToValidToken(jwt))
             {
                 return BadRequest(HttpResponseMessages.BadToken);
             }

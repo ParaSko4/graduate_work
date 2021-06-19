@@ -28,15 +28,15 @@ namespace graduate_work.Utils
                 switch (options)
                 {
                     case ApiConfig.Options.SchoolRegistration:
-                        urlPosition = ApiConfig.EmailRegistrationMessageTemplate.IndexOf(ApiConfig.TagUrl);
-                        mm.Body = ApiConfig.EmailRegistrationMessageTemplate.Remove(urlPosition, ApiConfig.TagUrl.Length).Insert(urlPosition, ApiConfig.registrationUrl + jwtService.GetJwt(options, obj));
+                        urlPosition = ApiConfig.EmailRegistrationMessageTemplate.IndexOf(ApiConfig.TagToken);
+                        mm.Body = ApiConfig.EmailRegistrationMessageTemplate.Remove(urlPosition, ApiConfig.TagToken.Length).Insert(urlPosition, jwtService.GetJwt(options, obj));
                         break;
                     case ApiConfig.Options.SchoolRegistrationSuccess:
                         mm.Body = "ADMIN";
                         break;
                     case ApiConfig.Options.Restore:
-                        urlPosition = ApiConfig.EmailRestoreMessageTemplate.IndexOf(ApiConfig.TagUrl);
-                        mm.Body = ApiConfig.EmailRestoreMessageTemplate.Remove(urlPosition, ApiConfig.TagUrl.Length).Insert(urlPosition, ApiConfig.restoreUrl + jwtService.GetJwt(options, userEmail));
+                        urlPosition = ApiConfig.EmailRestoreMessageTemplate.IndexOf(ApiConfig.TagToken);
+                        mm.Body = ApiConfig.EmailRestoreMessageTemplate.Remove(urlPosition, ApiConfig.TagToken.Length).Insert(urlPosition, jwtService.GetJwt(options, obj));
                         break;
                     case ApiConfig.Options.RestoreSuccess:
                         mm.Body = ApiConfig.EmailRestoreSuccessMessageTemplate;

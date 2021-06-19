@@ -38,9 +38,11 @@ namespace graduate_work.Utils
                     );
                     break;
                 case ApiConfig.Options.Restore:
-                    obj = jwtSecurityToken.Claims.First(claim => claim.Type == ApiConfig.ClaimTypeUserEmail).Value;
-                    break;
-                default:
+                    obj = new RestoreData(
+                        jwtSecurityToken.Claims.First(claim => claim.Type == ApiConfig.ClaimTypeUserEmail).Value,
+                        jwtSecurityToken.Claims.First(claim => claim.Type == ApiConfig.ClaimTypeUserNewPassword).Value,
+                        jwtSecurityToken.Claims.First(claim => claim.Type == ApiConfig.ClaimTypeUserNewPassword).Value
+                    );
                     break;
             }
 
@@ -62,14 +64,16 @@ namespace graduate_work.Utils
                         new Claim(ApiConfig.ClaimTypeUserEmail, regInfo.Email),
                         new Claim(ApiConfig.ClaimTypeSchoolName, regInfo.SchoolName),
                         new Claim(ApiConfig.ClaimTypeSchoolLocation, regInfo.SchoolLocation),
-                        new Claim(ApiConfig.ClaimTypeSchoolEmail, regInfo.SchoolEmail),
+                        new Claim(ApiConfig.ClaimTypeSchoolEmail, regInfo.SchoolEmail != null ? regInfo.SchoolEmail : ""),
                         new Claim(ApiConfig.ClaimTypeSchoolNumber, regInfo.SchoolNumber),
                     };
                     break;
                 case ApiConfig.Options.Restore:
+                    RestoreData rd = obj as RestoreData;
                     claims = new List<Claim>
                     {
-                        new Claim(ApiConfig.ClaimTypeUserEmail, obj as string),
+                        new Claim(ApiConfig.ClaimTypeUserEmail, rd.Email),
+                        new Claim(ApiConfig.ClaimTypeUserNewPassword, rd.NewPassword)
                     };
                     break;
                 default:
@@ -113,12 +117,33 @@ namespace graduate_work.Utils
 
         public bool CheckExpiryTime(string jwt)
         {
-            jwtSecurityToken = jwtSecurityTokenHandler.ReadToken(jwt) as JwtSecurityToken;
+            try
+            {
+                jwtSecurityToken = jwtSecurityTokenHandler.ReadToken(jwt) as JwtSecurityToken;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
 
             var expClaim = jwtSecurityToken.Claims.First(claim => claim.Type == ApiConfig.ClaimTypeExpiryToken).Value;
             var tokenExpiryTime = Convert.ToDouble(expClaim).UnixTimeStampToDateTime();
 
             return tokenExpiryTime > DateTime.UtcNow.ToLocalTime();
+        }
+
+        public bool CheckToValidToken(string jwt)
+        {
+            try
+            {
+                jwtSecurityToken = jwtSecurityTokenHandler.ReadToken(jwt) as JwtSecurityToken;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

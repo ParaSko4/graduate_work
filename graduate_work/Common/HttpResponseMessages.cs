@@ -18,7 +18,7 @@
     public const string RestoreCheckEmail = "Please check your email for password recovery.";
     public const string RestoredSuccess = "Your password success restored!";
 
-    public const string SignInFailed = "Your email or password are wrong!";
+    public const string SignInFailed = "Your login or password are wrong!";
     public const string SignInSuccess = "You have successfully logged in!";
     public const string SignOutSuccess = "You sign out success!";
 }
